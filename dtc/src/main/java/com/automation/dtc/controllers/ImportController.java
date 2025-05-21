@@ -9,8 +9,11 @@ import com.automation.dtc.xmlsfiles.FilesPaths;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -98,23 +101,40 @@ public class ImportController {
     		RCD_input.setStyle("-fx-text-fill: green; -fx-opacity: 1; -fx-font-size: 10px;");
     	}
     }
-
+ 
     @FXML
     void validate_import_btn_clicked(ActionEvent event) throws Exception {
-    	if(isFilesChecked()) {
-    		
-    	}
+        if (!isFilesChecked()) {
+        	Alert alert = new Alert(Alert.AlertType.WARNING);
+        	alert.setTitle("Missing Files");
+        	alert.setHeaderText(null);
+        	alert.setContentText("Please import all required files (RCD, DSD, and DiagObject) before proceeding.");
+
+        	// Force fixed width
+        	DialogPane pane = alert.getDialogPane();
+        	pane.setMinWidth(Region.USE_PREF_SIZE);
+        	pane.setPrefWidth(350);
+        	pane.setMaxWidth(Region.USE_PREF_SIZE);
+
+        	// Apply external CSS
+        	pane.getStylesheets().add(getClass().getResource("/styles/alert-style.css").toExternalForm());
+        	pane.getStyleClass().add("custom-alert");
+        	alert.showAndWait();
+            return;
+        }
+
+        readDtcTable.readTable();
     }
+
     
     public boolean isFilesChecked() throws Exception{
-    	if (readDtcTable.getRcdPath().equals("") || 
-    		readDtcTable.getRcdPath() == null || 
-    		filesPaths.getDsd_files().isEmpty() || 
-    		filesPaths.getDiag_files().isEmpty()) {
-    		
+    	String rcdPath = readDtcTable.getRcdPath();
+    	List<String> dsd_files = filesPaths.getDsd_files();
+    	List<String> diag_files = filesPaths.getDiag_files();
+    	if (rcdPath == null || rcdPath.equals("") || dsd_files == null || dsd_files.isEmpty() || diag_files == null || diag_files.isEmpty()) {
     		return false;
     	}else {
-    		return false;
+    		return true;
     	}
     }
 

@@ -16,6 +16,7 @@ public class ReadDtcTable {
 	private String rcdPath;
 
 	public ReadDtcTable() {
+		this.startRow = 26;
 	}
 
 	public String getRcdPath() {
@@ -40,7 +41,7 @@ public class ReadDtcTable {
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 			XSSFSheet sheet = workbook.getSheet("LECTURE_DEFAUTS");
 
-			int startRow = 26;
+			
 			int maxEmptyRows = 3;
 			int emptyCount = 0;
 			List<List<String>> data_dtc = new ArrayList<>();

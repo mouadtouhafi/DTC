@@ -37,7 +37,6 @@ public class MainController {
 
     @FXML
     public void handleImport() {
-        System.out.println("Import RCD clicked.");
         ReadDtcTable readDtcTable = new ReadDtcTable();
         FileChooser fileChooser = new FileChooser();
     	ExtensionFilter excelFilter = new ExtensionFilter("Excel Files", "*.xlsx", "*.xls");
@@ -47,7 +46,6 @@ public class MainController {
     		return;
     	}else {
     		readDtcTable.setRcdPath(file.getPath());
-    		System.out.println(file.getPath());
     	}
     }
     
