@@ -30,7 +30,7 @@
             </ImageView>
             <Pane layoutX="121.0" layoutY="246.0" prefHeight="129.0" prefWidth="158.0">
                <children>
-                  <Button fx:id="start_btn" mnemonicParsing="false" onAction="#start_btn_clicked" prefHeight="28.0" prefWidth="158.0" text="Button">
+                  <Button fx:id="start_btn" mnemonicParsing="false" onAction="#start_btn_clicked" prefHeight="28.0" prefWidth="158.0" text="Start">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" translateX="-10.0">
                            <image>
@@ -48,7 +48,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="about_btn" layoutY="92.0" mnemonicParsing="false" onAction="#about_btn_clicked" prefHeight="28.0" prefWidth="158.0" text="About">
+                  <Button fx:id="about_btn" layoutY="96.0" mnemonicParsing="false" onAction="#about_btn_clicked" prefHeight="28.0" prefWidth="158.0" text="About">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" translateX="-12.0">
                            <image>

@@ -109,24 +109,18 @@ public class ImportController {
         	alert.setTitle("Missing Files");
         	alert.setHeaderText(null);
         	alert.setContentText("Please import all required files (RCD, DSD, and DiagObject) before proceeding.");
-
-        	// Force fixed width
         	DialogPane pane = alert.getDialogPane();
         	pane.setMinWidth(Region.USE_PREF_SIZE);
         	pane.setPrefWidth(350);
         	pane.setMaxWidth(Region.USE_PREF_SIZE);
-
-        	// Apply external CSS
-        	pane.getStylesheets().add(getClass().getResource("/styles/alert-style.css").toExternalForm());
+        	pane.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         	pane.getStyleClass().add("custom-alert");
         	alert.showAndWait();
             return;
         }
-
         readDtcTable.readTable();
     }
 
-    
     public boolean isFilesChecked() throws Exception{
     	String rcdPath = readDtcTable.getRcdPath();
     	List<String> dsd_files = filesPaths.getDsd_files();
