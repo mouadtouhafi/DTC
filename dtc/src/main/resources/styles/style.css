@@ -1,0 +1,9 @@
+.container {
+    -fx-padding: 40;
+    -fx-background-color: #f4f4f4;
+}
+
+.button {
+    -fx-font-size: 14px;
+    -fx-pref-width: 200;
+}
