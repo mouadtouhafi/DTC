@@ -1,9 +1,11 @@
-package com.automation.dtc.readtable;
+package com.automation.dtc.inputsdata;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -35,7 +37,9 @@ public class ReadDtcTable {
 		this.rcdPath = rcdPath;
 	}
 	
-	public List<List<String>> readTable() {
+	static List<List<String>> rcdFinalData;
+
+	public void readTable() {
 		List<List<String>> data_dtc = new ArrayList<>();
 		try {
 			FileInputStream file = new FileInputStream(rcdPath);
@@ -90,7 +94,8 @@ public class ReadDtcTable {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		return data_dtc;
+		ReadDtcTable.rcdFinalData = data_dtc;
+//		return data_dtc;
 	}
 	
 	public String toTwoBitBinary(String code) {
@@ -126,5 +131,13 @@ public class ReadDtcTable {
 
 	    int decimal = Integer.parseInt(binary, 2);
 	    return Integer.toHexString(decimal).toUpperCase();
+	}
+	
+	public Set<String> concatDTCs(){
+		Set<String> allDtcCodes = new HashSet<>();
+		for (List<String> row : ReadDtcTable.rcdFinalData) {
+            allDtcCodes.add(row.get(0));
+        }
+		return allDtcCodes;
 	}
 }
