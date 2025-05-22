@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.automation.dtc.readtable.ReadDtcTable;
+import com.automation.dtc.inputsdata.ReadDtcTable;
 import com.automation.dtc.xmlsfiles.FilesPaths;
 
 import javafx.event.ActionEvent;
@@ -40,8 +40,8 @@ public class ImportController {
     @FXML
     private Button validate_import_btn;
     
-    private FilesPaths filesPaths = new FilesPaths();
-    private ReadDtcTable readDtcTable = new ReadDtcTable();
+    public static FilesPaths filesPaths = new FilesPaths();
+    public static ReadDtcTable readDtcTable = new ReadDtcTable();
 
     @FXML
     void DSD_btn_clicked(ActionEvent event) {
@@ -96,7 +96,6 @@ public class ImportController {
     		return;
     	}else {
     		readDtcTable.setRcdPath(file.getPath());
-    		System.out.println(file.getPath());
     		RCD_input.setText(file.getName());
     		RCD_input.setStyle("-fx-text-fill: green; -fx-opacity: 1; -fx-font-size: 10px;");
     	}
