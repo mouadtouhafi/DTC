@@ -87,7 +87,7 @@ public class ReadDtcTable {
 			    }
 			    data_dtc.add(cols_vals);
 			}
-			System.out.println(data_dtc);
+//			System.out.println(data_dtc);
 			workbook.close();
 			file.close();
 
@@ -139,5 +139,12 @@ public class ReadDtcTable {
             allDtcCodes.add(row.get(0));
         }
 		return allDtcCodes;
+	}
+	
+	public Set<String> removeIntegratedDTCs(Set<String> allDtcCodes, Set<String> dtcCodesInXml) {
+		Set<String> missingDtcCodes = new HashSet<>(allDtcCodes);
+        missingDtcCodes.removeAll(dtcCodesInXml);
+        System.out.println(missingDtcCodes);
+        return missingDtcCodes;
 	}
 }
