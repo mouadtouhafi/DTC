@@ -10,7 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class ReadXMLDiag {
+public class ReadXMLMessaging {
 	
 	public List<String> readXMLDtc(String file) {
 		

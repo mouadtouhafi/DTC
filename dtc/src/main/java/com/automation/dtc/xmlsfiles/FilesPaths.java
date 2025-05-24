@@ -1,6 +1,5 @@
 package com.automation.dtc.xmlsfiles;
 
-import java.io.File;
 import java.util.List;
 
 public class FilesPaths {

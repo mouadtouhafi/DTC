@@ -3,7 +3,7 @@ package com.automation.dtc.controllers;
 import java.io.File;
 import java.io.IOException;
 
-import com.automation.dtc.readtable.ReadDtcTable;
+import com.automation.dtc.inputsdata.ReadDtcTable;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

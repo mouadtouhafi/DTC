@@ -76,7 +76,7 @@ public class ReadDtcTable {
 			    List<String> cols_vals = new ArrayList<String>();
 			    for (int col : new int[] {2, 3, 4, 6}) {
 			        Cell cell = row.getCell(col);
-			        String value = (cell != null) ? cell.toString().trim() : "";
+			        String value = (cell != null) ? cell.toString().trim().replace(".0", "") : "";
 			        if(col==2) {
 			        	value = value.toUpperCase();
 			        	String secondDigit = toTwoBitBinary(value);
@@ -95,7 +95,7 @@ public class ReadDtcTable {
 			ex.printStackTrace();
 		}
 		ReadDtcTable.rcdFinalData = data_dtc;
-//		return data_dtc;
+		System.out.println("DTC dans RCD : " + data_dtc);
 	}
 	
 	public String toTwoBitBinary(String code) {
@@ -133,15 +133,15 @@ public class ReadDtcTable {
 	    return Integer.toHexString(decimal).toUpperCase();
 	}
 	
-	public Set<String> concatDTCs(){
+	public Set<String> extractDTCsCode(){
 		Set<String> allDtcCodes = new HashSet<>();
 		for (List<String> row : ReadDtcTable.rcdFinalData) {
-            allDtcCodes.add(row.get(0));
+            allDtcCodes.add(row.get(0) + "_" + row.get(2));
         }
 		return allDtcCodes;
 	}
 	
-	public Set<String> removeIntegratedDTCs(Set<String> allDtcCodes, Set<String> dtcCodesInXml) {
+	public Set<String> removeIntegratedDTCs(Set<String> allDtcCodes, List<String> dtcCodesInXml) {
 		Set<String> missingDtcCodes = new HashSet<>(allDtcCodes);
         missingDtcCodes.removeAll(dtcCodesInXml);
         System.out.println(missingDtcCodes);

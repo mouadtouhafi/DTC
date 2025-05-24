@@ -2,6 +2,8 @@ package com.automation.dtc.controllers;
 
 import java.io.IOException;
 
+import com.automation.dtc.inputsdata.ReadXMLDiag;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
