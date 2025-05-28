@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.automation.dtc.inputsdata.ReadDtcTable;
 import com.automation.dtc.inputsdata.ReadXMLDiag;
+import com.automation.dtc.inputsdata.ReadXMLMessaging;
 import com.automation.dtc.xmlsfiles.FilesPaths;
 
 import javafx.event.ActionEvent;
@@ -119,9 +120,11 @@ public class ImportController {
             return;
         }
         readDtcTable.readTable();
+        ReadXMLMessaging readXMLMessaging = new ReadXMLMessaging();
         for(String file : ImportController.filesPaths.getDiag_files()) {
 //    		System.out.println(readDtcTable.concatDTCs());
     		readDtcTable.removeIntegratedDTCs(readDtcTable.extractDTCsCode(), new ReadXMLDiag().readXMLDtc(file));
+    		readXMLMessaging.dtc_code_parameter_exists(file);
     	}
     }
 
