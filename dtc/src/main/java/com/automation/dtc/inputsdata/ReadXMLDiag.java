@@ -1,7 +1,9 @@
 package com.automation.dtc.inputsdata;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,59 +14,42 @@ import org.w3c.dom.NodeList;
 
 public class ReadXMLDiag {
 	
-	public List<String> readXMLDtc(String file) {
+	public static List<String> all_diag_dtc = new ArrayList<String>();
+	
+	public Map<String, List<String>> readXMLDtc(String file) {
 		
-		List<String> dtcCodesInXml = new ArrayList<>();
+		Map<String, List<String>> OLD_DIAG_DTC = new HashMap<String, List<String>>();
 		try {
-
-            /*************************************************************
-             * Creating a DocumentBuilder and parsing the XML file to DOM
-             *************************************************************/
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(file);
             doc.getDocumentElement().normalize();
             
-            NodeList GpcEcuDTCDefList = doc.getElementsByTagName("GpcEcuDTCDef");
-            if (GpcEcuDTCDefList.getLength() > 0) {
-            	for (int i = 0; i < GpcEcuDTCDefList.getLength(); i++) {
-                	Element entry = (Element) GpcEcuDTCDefList.item(i);
-                	String DTCCode = entry.getAttribute("DTCCode").trim();
-                	
-                    if (!DTCCode.isEmpty()) {
-                    	NodeList GpcEcuDTCPropertyRef = entry.getElementsByTagName("GpcEcuDTCPropertyRef");
-                    	if (GpcEcuDTCPropertyRef.getLength() > 0) {
-                    		Element propertyElement = (Element) GpcEcuDTCPropertyRef.item(0);
-                    		String PropertyName = propertyElement.getAttribute("PropertyName").trim();
-                    			
-                    		NodeList GpcEcuDTCPropertyDef = doc.getElementsByTagName("GpcEcuDTCPropertyDef");
-                    		if(GpcEcuDTCPropertyDef.getLength()>0) {
-                    			for(int j=0; j<GpcEcuDTCPropertyDef.getLength(); j++) {
-                    				Element GpcEcuDTCPropertyDiscretValueElement = (Element) GpcEcuDTCPropertyDef.item(j);
-                    				String shortName = GpcEcuDTCPropertyDiscretValueElement.getAttribute("ShortName");
-                    				
-                    				if(shortName.equals(PropertyName)) {
-                    					NodeList GpcEcuDTCPropertyDiscretValues = GpcEcuDTCPropertyDiscretValueElement.getElementsByTagName("GpcEcuDTCPropertyDiscretValue");
-                    					if(GpcEcuDTCPropertyDiscretValues.getLength()>0) {
-                    						for(int k=0; k<GpcEcuDTCPropertyDiscretValues.getLength(); k++) {
-                    							Element GpcEcuDTCPropertyDiscretValElement = (Element) GpcEcuDTCPropertyDiscretValues.item(k);
-                    							String property = GpcEcuDTCPropertyDiscretValElement.getAttribute("ShortName").trim().replace("DTC_FAULT_TYPE_", "");
-                    							String couple = DTCCode +"_"+ property;
-                    							if(property.length() == 2 && !dtcCodesInXml.contains(couple)) {
-                    								dtcCodesInXml.add(couple);
-                    							}
-                    						}
-                    					}
-                    				}
-                    			}
-                    		}
-                    	}
-                    }
-                }
+            NodeList listOfProperties = doc.getElementsByTagName("GpcEcuDTCPropertyDef");
+            if (listOfProperties.getLength() > 0) {
+            	for(int i=0; i<listOfProperties.getLength(); i++) {
+            		Element property = (Element) listOfProperties.item(i);
+            		String dtcCode = property.getAttribute("ShortName").trim().replace("DTC_FAULT_TYPE_", "");
+            		if(dtcCode.length() == 4) {
+            			List<String> characterizations = new ArrayList<String>();
+            			NodeList listChara = property.getElementsByTagName("GpcEcuDTCPropertyDiscretValue");
+            			if(listChara.getLength() > 0) {
+            				for (int j = 0; j < listChara.getLength(); j++) {
+								Element charaElement = (Element) listChara.item(j);
+								String chara = charaElement.getAttribute("ShortName").trim().replace("DTC_FAULT_TYPE_", "");
+								if(!characterizations.contains(chara)) {
+									characterizations.add(chara);
+								}
+							}
+            				OLD_DIAG_DTC.put(dtcCode, characterizations);
+            			}
+            		}
+            	}
             }
+          
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
-		return dtcCodesInXml;
+		return OLD_DIAG_DTC;
 	}
 }
