@@ -46,7 +46,6 @@ public class ReadXMLDiag {
             		}
             	}
             }
-          
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}

@@ -137,7 +137,7 @@ public class ReadDtcTable {
 		return Integer.toHexString(decimal).toUpperCase();
 	}
 
-	public Map<String, List<String>> organize(List<List<String>> rcdFinalData, Map<String, List<String>> OLD_DIAG_DTC) {
+	public Map<String, List<String>> organizeDtcCaras(List<List<String>> rcdFinalData, Map<String, List<String>> OLD_DIAG_DTC) {
 		List<String> DTC = new ArrayList<String>();
 		for (List<String> list : rcdFinalData) {
 			if (!DTC.contains(list.get(0))) {
@@ -166,15 +166,11 @@ public class ReadDtcTable {
 			List<String> devCaracterizations = OLD_DIAG_DTC.get(dtc);
 
 			if (devCaracterizations == null) {
-				allDtcsToAddInDiag.put(dtc, new ArrayList<>(rcdCaracterizations));
-				for (String cara : rcdCaracterizations) {
-					System.out.println(dtc + "_" + cara);
-				}
+				allDtcsToAddInDiag.put("$"+dtc, new ArrayList<>(rcdCaracterizations));
 			} else {
 				List<String> nonDevCara = new ArrayList<>();
 				for (String cara : rcdCaracterizations) {
 					if (!devCaracterizations.contains(cara)) {
-						System.out.println(dtc + "_" + cara);
 						nonDevCara.add(cara);
 					}
 				}
@@ -185,5 +181,17 @@ public class ReadDtcTable {
 		}
 		System.out.println(allDtcsToAddInDiag);
 		return allDtcsToAddInDiag;
+	}
+	
+	public List<String> organize_labels(){
+		List<String> dtc_labels = new ArrayList<String>();
+		ReadDtcTable.rcdFinalData.parallelStream().forEach(innerList -> {
+			String item ="";
+		    for (String value : innerList) {
+		    	item = item + value + "|";
+		    }
+		    dtc_labels.add(item);
+		});
+		return dtc_labels;
 	}
 }
