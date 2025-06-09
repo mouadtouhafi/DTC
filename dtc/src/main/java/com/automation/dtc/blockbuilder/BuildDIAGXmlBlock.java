@@ -2,10 +2,9 @@ package com.automation.dtc.blockbuilder;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,7 +28,6 @@ public class BuildDIAGXmlBlock {
 	
 	
 	void create_unexisting_dtc_blocks(String file, Map<String, List<String>> dtc_to_add, List<String> dtc_labels) {
-		List<String> added_dtc_temp = new ArrayList<String>();
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -42,6 +40,10 @@ public class BuildDIAGXmlBlock {
             	if(gpcEcuDTCDef.getLength()>0) {
             		for(Map.Entry<String, List<String>> entry : dtc_to_add.entrySet()) {
             			String dtc = entry.getKey();
+            			/** 
+            			 * if a DTC contains "&", this means it is a new DTC, never added before,
+            			 * if it doesn't contain "&", this means only the property is new
+            			 *  **/
             			if(dtc.contains("$")) {
             				List<String> caras = new ArrayList<String>();
             				boolean dtcAdded = false;
@@ -60,28 +62,31 @@ public class BuildDIAGXmlBlock {
             			}else {
             				List<String> caras = new ArrayList<String>();
             				for(String s : dtc_labels) {
-            					String cara = s.split("\\|")[2];
-            					if(entry.getValue().contains(cara)) {
-            						if(!caras.contains(s)) {
-            							caras.add(s);
-            						}
+            					if(s.split("\\|")[0].equals(dtc)) {
+            						String cara = s.split("\\|")[2];
+                					if(entry.getValue().contains(cara)) {
+                						if(!caras.contains(s)) {
+                							caras.add(s);
+                						}
+                					}
             					}
             				}
+            				System.out.println(caras);
             				build_fault_type_values_only(file, doc, caras);
             			}
             		}
             	}
             }else {
             	create_full_dtc_code_block(doc, file, ReadDtcTable.rcdFinalData);
+            	create_full_cara_block(doc, file, ReadDtcTable.rcdFinalData, dtc_to_add);
             }
-            added_dtc_temp.clear();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void build_fault_type_values_only(String file, Document doc, List<String> caras) throws Exception {
-		System.out.println("acara : "+caras);
+//		System.out.println("acara : "+caras);
 		NodeList gpcEcuDTCPropertyDef = doc.getElementsByTagName("GpcEcuDTCPropertyDef");
 		if(gpcEcuDTCPropertyDef.getLength() > 0) {
 			for(int i=0; i<gpcEcuDTCPropertyDef.getLength(); i++) {
@@ -159,34 +164,87 @@ public class BuildDIAGXmlBlock {
 		
 		Element gpcEcuDTCsDef = doc.createElement("GpcEcuDTCsDef");
 		gpcEcuDTC.appendChild(gpcEcuDTCsDef);
+		List<String> developped = new ArrayList<String>();
 		for(List<String> dtcData : allDtc) {
-			Element newDtcDef = doc.createElement("GpcEcuDTCDef");
-			newDtcDef.setAttribute("DTCCode", dtcData.get(0));
-			newDtcDef.setAttribute("Label", "@TTBT"+dtcData.get(1));
-			newDtcDef.setAttribute("LabelEtude", "");
+			if(!developped.contains(dtcData.get(0))) {
+				Element newDtcDef = doc.createElement("GpcEcuDTCDef");
+				newDtcDef.setAttribute("DTCCode", dtcData.get(0));
+				newDtcDef.setAttribute("Label", "@TTBT"+dtcData.get(1));
+				newDtcDef.setAttribute("LabelEtude", "");
 
-	        Element gpcEcuDTCPropertiesRef = doc.createElement("GpcEcuDTCPropertiesRef");
-	        newDtcDef.appendChild(gpcEcuDTCPropertiesRef);
+		        Element gpcEcuDTCPropertiesRef = doc.createElement("GpcEcuDTCPropertiesRef");
+		        newDtcDef.appendChild(gpcEcuDTCPropertiesRef);
 
-	        Element gpcEcuDTCPropertyRef = doc.createElement("GpcEcuDTCPropertyRef");
-	        gpcEcuDTCPropertyRef.setAttribute("PropertyName", "DTC_FAULT_TYPE_"+dtcData.get(0));
-	        gpcEcuDTCPropertiesRef.appendChild(gpcEcuDTCPropertyRef);
+		        Element gpcEcuDTCPropertyRef = doc.createElement("GpcEcuDTCPropertyRef");
+		        gpcEcuDTCPropertyRef.setAttribute("PropertyName", "DTC_FAULT_TYPE_"+dtcData.get(0));
+		        gpcEcuDTCPropertiesRef.appendChild(gpcEcuDTCPropertyRef);
 
-	        Element gpcEcuDTCPropertyStatus = doc.createElement("GpcEcuDTCPropertyRef");
-	        gpcEcuDTCPropertyStatus.setAttribute("PropertyName", "DTC_STATUS_1");
-	        gpcEcuDTCPropertiesRef.appendChild(gpcEcuDTCPropertyStatus);
-	        
-	        gpcEcuDTCsDef.appendChild(newDtcDef);
+		        Element gpcEcuDTCPropertyStatus = doc.createElement("GpcEcuDTCPropertyRef");
+		        gpcEcuDTCPropertyStatus.setAttribute("PropertyName", "DTC_STATUS_1");
+		        gpcEcuDTCPropertiesRef.appendChild(gpcEcuDTCPropertyStatus);
+		        
+		        gpcEcuDTCsDef.appendChild(newDtcDef);
+		        developped.add(dtcData.get(0));
+			}
 		}
-		
-		gpcEcu.appendChild(gpcEcuDTC);
-		
+		gpcEcu.appendChild(gpcEcuDTC);		
         clean_doc_break_lines(doc);
     	write_doc(doc, new File(file));
 	}
 	
-	public void check_discretValue() {
+	
+	public void create_full_cara_block(Document doc, String file, List<List<String>> allDtc, Map<String, List<String>> dtc_to_add) throws Exception {
+		Node gpcEcuDTC = doc.getElementsByTagName("GpcEcuDTC").item(0);
+		Element gpcEcuDTCPropertiesDef = doc.createElement("GpcEcuDTCPropertiesDef");
 		
+		/**
+		 * Preparing DTC data : each DTC associated to its properties with labels
+		 * **/
+		List<String> dtcList = new ArrayList<String>();
+		for(Map.Entry<String, List<String>> entry : dtc_to_add.entrySet()) {
+			if(!dtcList.contains(entry.getKey())) {
+				dtcList.add(entry.getKey());
+			}
+		}
+		System.out.println(dtcList);
+		Map<String, List<String>>  dtcCaras = new HashMap<String, List<String>>();
+		for(String dtc : dtcList) {
+			List<String> cara_label = new ArrayList<String>();
+			for(List<String> fullDtc : allDtc) {
+				if(dtc.replace("$", "").equals(fullDtc.get(0))) {
+					cara_label.add(fullDtc.get(2)+"|"+fullDtc.get(3));
+				}
+			}
+			
+			dtcCaras.put(dtc, cara_label);
+		}
+		
+		/**
+		 *  Building discret values properties for each DTC
+		 * */
+		for(Map.Entry<String, List<String>> entry : dtcCaras.entrySet()) {
+			Element newPropertyDef = doc.createElement("GpcEcuDTCPropertyDef");
+			newPropertyDef.setAttribute("Label", "@P14473-POLUXDATA");
+			newPropertyDef.setAttribute("PropertyType", "FAULT_TYPE");
+			newPropertyDef.setAttribute("ServiceParamName", "DTC_FAULT_TYPE");
+			newPropertyDef.setAttribute("ShortName", "DTC_FAULT_TYPE_"+entry.getKey());
+			
+			Element discretValuesList = doc.createElement("GpcEcuDTCPropertyDiscretValues");
+			List<String> caras = entry.getValue();
+			for(String cara : caras) {
+				System.out.println(entry);
+				Element discretValue = doc.createElement("GpcEcuDTCPropertyDiscretValue");
+				discretValue.setAttribute("Label", "@TTBT"+cara.split("\\|")[1]);
+				discretValue.setAttribute("ShortName", "DTC_FAULT_TYPE_"+cara.split("\\|")[0].replace("$", ""));
+				discretValuesList.appendChild(discretValue);
+			}
+			
+			newPropertyDef.appendChild(discretValuesList);
+			gpcEcuDTCPropertiesDef.appendChild(newPropertyDef);
+		}
+		gpcEcuDTC.appendChild(gpcEcuDTCPropertiesDef);
+		clean_doc_break_lines(doc);
+    	write_doc(doc, new File(file));
 	}
 	
 	public void clean_doc_break_lines(Document doc) throws Exception {
