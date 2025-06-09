@@ -16,7 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ReadDtcTable {
 	private int startRow;
 	private String rcdPath;
-	static List<List<String>> rcdFinalData;
+	public static List<List<String>> rcdFinalData;
 
 	public ReadDtcTable() {
 		this.startRow = 26;
