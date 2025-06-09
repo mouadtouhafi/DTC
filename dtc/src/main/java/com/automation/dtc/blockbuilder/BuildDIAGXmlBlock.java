@@ -2,8 +2,10 @@ package com.automation.dtc.blockbuilder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,6 +22,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.automation.dtc.inputsdata.ReadDtcTable;
 
 public class BuildDIAGXmlBlock {
 	
@@ -68,7 +72,7 @@ public class BuildDIAGXmlBlock {
             		}
             	}
             }else {
-            	create_full_dtc_code_block();
+            	create_full_dtc_code_block(doc, file, ReadDtcTable.rcdFinalData);
             }
             added_dtc_temp.clear();
 		} catch (Exception e) {
@@ -95,7 +99,6 @@ public class BuildDIAGXmlBlock {
 				}
 			}
 		}
-        System.out.println("=======================================");
         clean_doc_break_lines(doc);
     	write_doc(doc, new File(file));
 	}
@@ -150,6 +153,42 @@ public class BuildDIAGXmlBlock {
     	write_doc(doc, new File(file));
 	}
 	
+	public void create_full_dtc_code_block(Document doc, String file, List<List<String>> allDtc) throws Exception {
+		Node gpcEcu = doc.getElementsByTagName("GpcEcu").item(0);
+		Element gpcEcuDTC = doc.createElement("GpcEcuDTC");
+		
+		Element gpcEcuDTCsDef = doc.createElement("GpcEcuDTCsDef");
+		gpcEcuDTC.appendChild(gpcEcuDTCsDef);
+		for(List<String> dtcData : allDtc) {
+			Element newDtcDef = doc.createElement("GpcEcuDTCDef");
+			newDtcDef.setAttribute("DTCCode", dtcData.get(0));
+			newDtcDef.setAttribute("Label", "@TTBT"+dtcData.get(1));
+			newDtcDef.setAttribute("LabelEtude", "");
+
+	        Element gpcEcuDTCPropertiesRef = doc.createElement("GpcEcuDTCPropertiesRef");
+	        newDtcDef.appendChild(gpcEcuDTCPropertiesRef);
+
+	        Element gpcEcuDTCPropertyRef = doc.createElement("GpcEcuDTCPropertyRef");
+	        gpcEcuDTCPropertyRef.setAttribute("PropertyName", "DTC_FAULT_TYPE_"+dtcData.get(0));
+	        gpcEcuDTCPropertiesRef.appendChild(gpcEcuDTCPropertyRef);
+
+	        Element gpcEcuDTCPropertyStatus = doc.createElement("GpcEcuDTCPropertyRef");
+	        gpcEcuDTCPropertyStatus.setAttribute("PropertyName", "DTC_STATUS_1");
+	        gpcEcuDTCPropertiesRef.appendChild(gpcEcuDTCPropertyStatus);
+	        
+	        gpcEcuDTCsDef.appendChild(newDtcDef);
+		}
+		
+		gpcEcu.appendChild(gpcEcuDTC);
+		
+        clean_doc_break_lines(doc);
+    	write_doc(doc, new File(file));
+	}
+	
+	public void check_discretValue() {
+		
+	}
+	
 	public void clean_doc_break_lines(Document doc) throws Exception {
 		/*
 		 * This removes all whitespace-only text nodes from the XML document.
@@ -179,12 +218,5 @@ public class BuildDIAGXmlBlock {
 		DOMSource source = new DOMSource(doc);
 		StreamResult result = new StreamResult(xmlFile);
 		transformer.transform(source, result);
-	}
-	public void create_full_dtc_code_block() {
-		
-	}
-	
-	public void check_discretValue() {
-		
 	}
 }
