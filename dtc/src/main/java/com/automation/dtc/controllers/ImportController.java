@@ -122,7 +122,7 @@ public class ImportController {
         readDtcTable.readTable();
         ReadXMLMessaging readXMLMessaging = new ReadXMLMessaging();
         for(String file : ImportController.filesPaths.getDiag_files()) {
-    		readDtcTable.removeIntegratedDTCs(readDtcTable.extractDTCsCode(), new ReadXMLDiag().readXMLDtc(file));
+//    		readDtcTable.removeIntegratedDTCs(readDtcTable.extractDTCsCode(), new ReadXMLDiag().readXMLDtc(file));
     		
     	}
         for(String file : ImportController.filesPaths.getDsd_files()) {
