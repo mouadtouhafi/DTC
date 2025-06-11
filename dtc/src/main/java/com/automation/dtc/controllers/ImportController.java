@@ -1,9 +1,10 @@
 package com.automation.dtc.controllers;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.automation.dtc.blockbuilder.BuildDIAGXmlBlock;
 import com.automation.dtc.inputsdata.ReadDtcTable;
 import com.automation.dtc.inputsdata.ReadXMLDiag;
 import com.automation.dtc.inputsdata.ReadXMLMessaging;
@@ -44,6 +45,8 @@ public class ImportController {
     
     public static FilesPaths filesPaths = new FilesPaths();
     public static ReadDtcTable readDtcTable = new ReadDtcTable();
+    public static BuildDIAGXmlBlock buildDiag = new BuildDIAGXmlBlock();
+    ReadXMLMessaging readXMLMessaging = new ReadXMLMessaging();
 
     @FXML
     void DSD_btn_clicked(ActionEvent event) {
@@ -106,23 +109,25 @@ public class ImportController {
         	alert.showAndWait();
             return;
         }
-        readDtcTable.readTable();
-        ReadXMLMessaging readXMLMessaging = new ReadXMLMessaging();
-        for(String file : ImportController.filesPaths.getDiag_files()) {
-//    		readDtcTable.removeIntegratedDTCs(readDtcTable.extractDTCsCode(), new ReadXMLDiag().readXMLDtc(file));
-    		
-    	}
-        for(String file : ImportController.filesPaths.getDsd_files()) {
-    		readXMLMessaging.dtc_code_parameter_exists(file);
-    		readXMLMessaging.fault_type_parameter_exists(file);
-    	}
+       
+        
+        Map<String, List<String>> readXmlDiagData = new ReadXMLDiag().readXMLDtc(filesPaths.getDiag_files());
+    	readDtcTable.readTable();
+    	
+    	Map<String, List<String>> organizedData = readDtcTable.organizeDtcCaras(ReadDtcTable.rcdFinalData, readXmlDiagData);
+    	List<String> organized_labels = readDtcTable.organize_labels();
+    	buildDiag.create_unexisting_dtc_blocks(filesPaths.getDiag_files(), organizedData, organized_labels);
+    	
+    	readXMLMessaging.dtc_code_parameter_exists(filesPaths.getDsd_files());
+		readXMLMessaging.fault_type_parameter_exists(filesPaths.getDsd_files());
+        
     }
 
     public boolean isFilesChecked() throws Exception{
     	String rcdPath = readDtcTable.getRcdPath();
-    	List<String> dsd_files = filesPaths.getDsd_files();
-    	List<String> diag_files = filesPaths.getDiag_files();
-    	if (rcdPath == null || rcdPath.equals("") || dsd_files == null || dsd_files.isEmpty() || diag_files == null || diag_files.isEmpty()) {
+    	String dsd_file = filesPaths.getDsd_files();
+    	String diag_file = filesPaths.getDiag_files();
+    	if (rcdPath == null || rcdPath.equals("") || dsd_file == null || dsd_file.isEmpty() || diag_file == null || diag_file.isEmpty()) {
     		return false;
     	}else {
     		return true;
