@@ -1,21 +1,19 @@
 package com.automation.dtc.xmlsfiles;
 
-import java.util.List;
-
 public class FilesPaths {
-	private List<String> dsd_files;
-	private List<String> diag_files;
+	private String dsd_file;
+	private String diag_file;
 	
-	public List<String> getDsd_files() {
-		return dsd_files;
+	public String getDsd_files() {
+		return dsd_file;
 	}
-	public void setDsd_files(List<String> dsd_files) {
-		this.dsd_files = dsd_files;
+	public void setDsd_files(String dsd_file) {
+		this.dsd_file = dsd_file;
 	}
-	public List<String> getDiag_files() {
-		return diag_files;
+	public String getDiag_files() {
+		return diag_file;
 	}
-	public void setDiag_files(List<String> diag_files) {
-		this.diag_files = diag_files;
+	public void setDiag_files(String diag_file) {
+		this.diag_file = diag_file;
 	}
 }
