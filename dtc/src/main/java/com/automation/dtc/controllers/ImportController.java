@@ -50,19 +50,12 @@ public class ImportController {
         FileChooser fileChooser = new FileChooser();
     	ExtensionFilter excelFilter = new ExtensionFilter("DSD Files", "*.xml");
     	fileChooser.getExtensionFilters().add(excelFilter);
-    	
-    	List<File> files = fileChooser.showOpenMultipleDialog(null);
-    	if (files == null || files.isEmpty()) {
+    	File file = fileChooser.showOpenDialog(null);
+    	if (file == null) {
     		return;
     	}else {
-    		List<String> paths = new ArrayList<>();
-    	    List<String> names = new ArrayList<>();
-    	    for (File file : files) {
-    	        paths.add(file.getPath());
-    	        names.add(file.getName());
-    	    }
-    	    filesPaths.setDsd_files(paths);
-    		DSD_input.setText(names.get(0) + " ...");
+    	    filesPaths.setDsd_files(file.getPath());
+    		DSD_input.setText(file.getName());
     		DSD_input.setStyle("-fx-text-fill: green; -fx-opacity: 1; -fx-font-size: 10px;");
     	}
     }
@@ -72,18 +65,12 @@ public class ImportController {
         FileChooser fileChooser = new FileChooser();
     	ExtensionFilter excelFilter = new ExtensionFilter("Diag Files", "*.xml");
     	fileChooser.getExtensionFilters().add(excelFilter);
-    	List<File> files = fileChooser.showOpenMultipleDialog(null);
-    	if (files == null || files.isEmpty()) {
+    	File file = fileChooser.showOpenDialog(null);
+    	if (file == null) {
     		return;
     	}else {
-    		List<String> paths = new ArrayList<>();
-    	    List<String> names = new ArrayList<>();
-    	    for (File file : files) {
-    	        paths.add(file.getPath());
-    	        names.add(file.getName());
-    	    }
-    	    filesPaths.setDiag_files(paths);
-    		DiagObject_input.setText(names.get(0) + " ...");
+    	    filesPaths.setDiag_files(file.getPath());
+    		DiagObject_input.setText(file.getName());
     		DiagObject_input.setStyle("-fx-text-fill: green; -fx-opacity: 1; -fx-font-size: 10px;");
     	}
     }
