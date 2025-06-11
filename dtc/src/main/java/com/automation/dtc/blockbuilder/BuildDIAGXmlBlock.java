@@ -26,8 +26,7 @@ import com.automation.dtc.inputsdata.ReadDtcTable;
 
 public class BuildDIAGXmlBlock {
 	
-	
-	void create_unexisting_dtc_blocks(String file, Map<String, List<String>> dtc_to_add, List<String> dtc_labels) {
+	public void create_unexisting_dtc_blocks(String file, Map<String, List<String>> dtc_to_add, List<String> dtc_labels) {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
