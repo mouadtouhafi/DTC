@@ -1,6 +1,7 @@
 package com.automation.dtc.controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,12 +13,18 @@ import com.automation.dtc.xmlsfiles.FilesPaths;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class ImportController {
@@ -42,6 +49,8 @@ public class ImportController {
 
     @FXML
     private Button validate_import_btn;
+    private Button selectAllBtn;   
+    private List<CheckBox> checkBoxes = new ArrayList<>();
     
     public static FilesPaths filesPaths = new FilesPaths();
     public static ReadDtcTable readDtcTable = new ReadDtcTable();
@@ -109,16 +118,24 @@ public class ImportController {
         	alert.showAndWait();
             return;
         }
+        validate_import_btn.setDisable(true);
         
         Map<String, List<String>> readXmlDiagData = new ReadXMLDiag().readXMLDtc(filesPaths.getDiag_files());
     	readDtcTable.readTable();
     	
-    	Map<String, List<String>> organizedData = readDtcTable.organizeDtcCaras(ReadDtcTable.rcdFinalData, readXmlDiagData);
-    	List<String> organized_labels = readDtcTable.organize_labels();
-    	buildDiag.create_unexisting_dtc_blocks(filesPaths.getDiag_files(), organizedData, organized_labels);
+    	Parent root = FXMLLoader.load(getClass().getResource("/view/dtcs_view.fxml"));
+    	Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+    	Scene scene = new Scene(root, 650,500);
+    	scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+    	stage.setScene(scene);
+    	stage.show();
     	
-    	readXMLMessaging.dtc_code_parameter_exists(filesPaths.getDsd_files());
-		readXMLMessaging.fault_type_parameter_exists(filesPaths.getDsd_files());
+//    	Map<String, List<String>> organizedData = readDtcTable.organizeDtcCaras(ReadDtcTable.rcdFinalData, readXmlDiagData);
+//    	List<String> organized_labels = readDtcTable.organize_labels();
+//    	buildDiag.create_unexisting_dtc_blocks(filesPaths.getDiag_files(), organizedData, organized_labels);
+//    	
+//    	readXMLMessaging.dtc_code_parameter_exists(filesPaths.getDsd_files());
+//		readXMLMessaging.fault_type_parameter_exists(filesPaths.getDsd_files());
         
     }
 
