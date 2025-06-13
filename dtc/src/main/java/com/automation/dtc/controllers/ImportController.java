@@ -109,7 +109,6 @@ public class ImportController {
         	alert.showAndWait();
             return;
         }
-       
         
         Map<String, List<String>> readXmlDiagData = new ReadXMLDiag().readXMLDtc(filesPaths.getDiag_files());
     	readDtcTable.readTable();
@@ -133,5 +132,4 @@ public class ImportController {
     		return true;
     	}
     }
-
 }

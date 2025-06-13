@@ -11,24 +11,24 @@
 
 <AnchorPane prefHeight="269.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.automation.dtc.controllers.HomeController">
    <children>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="448.0" prefWidth="400.0" style="-fx-background-color: #DAF7A6;">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" style="-fx-background-color: #DAF7A6;">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="100.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="225.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/images/CapgeminiLogo.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="35.0" fitWidth="94.0" layoutX="6.0" layoutY="410.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="35.0" fitWidth="94.0" layoutX="10.0" layoutY="440.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/images/DiagboxIcon.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="160.0" fitWidth="250.0" layoutX="80.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="160.0" fitWidth="250.0" layoutX="205.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/images/logo.png" />
                </image>
             </ImageView>
-            <Pane layoutX="121.0" layoutY="246.0" prefHeight="129.0" prefWidth="158.0">
+            <Pane layoutX="250.0" layoutY="265.0" prefHeight="129.0" prefWidth="158.0">
                <children>
                   <Button fx:id="start_btn" mnemonicParsing="false" onAction="#start_btn_clicked" prefHeight="28.0" prefWidth="158.0" text="Start">
                      <graphic>
@@ -59,12 +59,12 @@
                   </Button>
                </children>
             </Pane>
-            <Label layoutX="169.0" layoutY="426.0" prefHeight="17.0" prefWidth="262.0" text="DTC automation - DSD-DiagObject | Auto development">
+            <Label layoutX="17.0" layoutY="475.0" prefHeight="17.0" prefWidth="262.0" text="DTC automation - DSD-DiagObject | Auto development">
                <font>
                   <Font size="9.0" />
                </font>
             </Label>
-            <Label layoutX="169.0" layoutY="411.0" prefHeight="17.0" prefWidth="262.0" text="© All Rights Reserved | TOUHAFI Mouad">
+            <Label layoutX="470.0" layoutY="475.0" prefHeight="17.0" prefWidth="262.0" text="© All Rights Reserved | TOUHAFI Mouad">
                <font>
                   <Font size="9.0" />
                </font>
