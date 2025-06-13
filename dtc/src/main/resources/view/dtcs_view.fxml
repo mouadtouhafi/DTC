@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="269.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.automation.dtc.controllers.HomeController">
+<AnchorPane prefHeight="269.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.automation.dtc.controllers.DtcController">
    <children>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" style="-fx-background-color: #DAF7A6;">
          <children>
@@ -28,10 +28,21 @@
                   <Image url="@/images/logo.png" />
                </image>
             </ImageView>
-            <Pane layoutX="250.0" layoutY="265.0" prefHeight="129.0" prefWidth="158.0" style="-fx-background-color: red;">
+            <Pane layoutX="9.0" layoutY="137.0" prefHeight="308.0" prefWidth="631.0">
                <children>
-                 
-                  
+                  <TableView fx:id="tableView" prefHeight="308.0" prefWidth="631.0">
+                    <columns>
+                      <TableColumn fx:id="checkboxes_column" prefWidth="75.0">
+                           <graphic>
+                              <CheckBox mnemonicParsing="false" prefHeight="22.0" prefWidth="16.0" />
+                           </graphic>
+						</TableColumn>
+                        <TableColumn fx:id="dtc_column" prefWidth="67.0" text="DTC" />
+                        <TableColumn fx:id="dtc_label_column" prefWidth="271.0" text="DTC label" />
+                        <TableColumn fx:id="property_column" text="Property" />
+                        <TableColumn fx:id="property_label_column" prefWidth="137.0" text="Property label" />
+                    </columns>
+                  </TableView>
                </children>
             </Pane>
             <Label layoutX="17.0" layoutY="475.0" prefHeight="17.0" prefWidth="262.0" text="DTC automation - DSD-DiagObject | Auto development">
