@@ -49,8 +49,6 @@ public class ImportController {
 
     @FXML
     private Button validate_import_btn;
-    private Button selectAllBtn;   
-    private List<CheckBox> checkBoxes = new ArrayList<>();
     
     public static FilesPaths filesPaths = new FilesPaths();
     public static ReadDtcTable readDtcTable = new ReadDtcTable();
