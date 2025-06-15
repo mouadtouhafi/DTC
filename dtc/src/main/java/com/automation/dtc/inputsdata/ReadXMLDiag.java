@@ -17,7 +17,7 @@ public class ReadXMLDiag {
 	public static List<String> all_diag_dtc = new ArrayList<String>();
 	
 	public Map<String, List<String>> readXMLDtc(String file) {
-		
+		all_diag_dtc.clear();
 		Map<String, List<String>> OLD_DIAG_DTC = new HashMap<String, List<String>>();
 		try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -49,6 +49,7 @@ public class ReadXMLDiag {
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
+		System.out.println("OLD_DIAG_DTC : " + OLD_DIAG_DTC);
 		return OLD_DIAG_DTC;
 	}
 }

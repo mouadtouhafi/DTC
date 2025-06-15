@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -19,7 +20,7 @@ public class ReadDtcTable {
 	public static List<List<String>> rcdFinalData;
 
 	public ReadDtcTable() {
-		this.startRow = 26;
+		this.startRow = 25;
 	}
 
 	public String getRcdPath() {
@@ -41,8 +42,7 @@ public class ReadDtcTable {
 	public void readTable() {
 		List<List<String>> data_dtc = new ArrayList<>();
 		try {
-			FileInputStream file = new FileInputStream(
-					"C://Users//mtouhafi//Desktop//DIAG-COM-22-053_O_FCPS (1).xlsx");
+			FileInputStream file = new FileInputStream(rcdPath);
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 			XSSFSheet sheet = workbook.getSheet("LECTURE_DEFAUTS");
 
@@ -179,7 +179,6 @@ public class ReadDtcTable {
 				}
 			}
 		}
-		System.out.println(allDtcsToAddInDiag);
 		return allDtcsToAddInDiag;
 	}
 	
@@ -193,5 +192,20 @@ public class ReadDtcTable {
 		    dtc_labels.add(item);
 		});
 		return dtc_labels;
+	}
+	
+	public List<List<String>> onlyDtcToDisplay(List<List<String>> rcdFinalData, Map<String, List<String>> allDtcsToAddInDiag){
+		List<List<String>> onlyDTCsToAdd = new ArrayList<>();
+		for (Map.Entry<String, List<String>> keys : allDtcsToAddInDiag.entrySet()) {
+			String key = keys.getKey();
+			for(int j=0; j<rcdFinalData.size(); j++) {
+				if(key.replace("$","").equals(rcdFinalData.get(j).get(0))) {
+					if(allDtcsToAddInDiag.get(key).contains(rcdFinalData.get(j).get(2))) {
+						onlyDTCsToAdd.add(rcdFinalData.get(j));
+					}
+				}
+			}
+		}
+		return onlyDTCsToAdd;
 	}
 }
