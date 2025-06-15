@@ -1,25 +1,23 @@
 package com.automation.dtc.controllers;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import com.automation.dtc.blockbuilder.BuildDIAGXmlBlock;
 import com.automation.dtc.inputsdata.ReadDtcTable;
-import com.automation.dtc.inputsdata.ReadXMLDiag;
 import com.automation.dtc.inputsdata.ReadXMLMessaging;
 import com.automation.dtc.xmlsfiles.FilesPaths;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
@@ -27,28 +25,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-public class ImportController {
+public class ImportController implements Initializable{
 
-    @FXML
-    private Button DSD_btn;
-
-    @FXML
-    private TextField DSD_input;
-
-    @FXML
-    private Button DiagObject_btn;
-
-    @FXML
-    private TextField DiagObject_input;
-
-    @FXML
-    private Button RCD_btn;
-
-    @FXML
-    private TextField RCD_input;
-
-    @FXML
-    private Button validate_import_btn;
+    @FXML private Button DSD_btn;
+    @FXML private TextField DSD_input;
+    @FXML private Button DiagObject_btn;
+    @FXML private TextField DiagObject_input;
+    @FXML private Button RCD_btn;
+    @FXML private TextField RCD_input;
+    @FXML private Button validate_import_btn;
     
     public static FilesPaths filesPaths = new FilesPaths();
     public static ReadDtcTable readDtcTable = new ReadDtcTable();
@@ -118,8 +103,7 @@ public class ImportController {
         }
         validate_import_btn.setDisable(true);
         
-        Map<String, List<String>> readXmlDiagData = new ReadXMLDiag().readXMLDtc(filesPaths.getDiag_files());
-    	readDtcTable.readTable();
+        
     	
     	Parent root = FXMLLoader.load(getClass().getResource("/view/dtcs_view.fxml"));
     	Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -128,12 +112,8 @@ public class ImportController {
     	stage.setScene(scene);
     	stage.show();
     	
-//    	Map<String, List<String>> organizedData = readDtcTable.organizeDtcCaras(ReadDtcTable.rcdFinalData, readXmlDiagData);
-//    	List<String> organized_labels = readDtcTable.organize_labels();
-//    	buildDiag.create_unexisting_dtc_blocks(filesPaths.getDiag_files(), organizedData, organized_labels);
-//    	
-//    	readXMLMessaging.dtc_code_parameter_exists(filesPaths.getDsd_files());
-//		readXMLMessaging.fault_type_parameter_exists(filesPaths.getDsd_files());
+    	
+    	
         
     }
 
@@ -147,4 +127,12 @@ public class ImportController {
     		return true;
     	}
     }
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		filesPaths.setDsd_files("");
+		filesPaths.setDiag_files("");
+		readDtcTable.setRcdPath("");
+		ReadDtcTable.rcdFinalData = null;
+	}
 }
