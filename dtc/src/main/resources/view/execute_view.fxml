@@ -28,9 +28,18 @@
                   <Image url="@/images/logo.png" />
                </image>
             </ImageView>
-            <Pane layoutX="208.0" layoutY="186.0" prefHeight="203.0" prefWidth="265.0">
+            <Pane layoutX="192.0" layoutY="186.0" prefHeight="203.0" prefWidth="350.0">
                <children>
-                  
+					<Label fx:id="label" layoutX="14.0" layoutY="95.0" text="Integration of fault codes in progress ..." visible="false">
+						<font>
+							<Font name="Calibri" size="13.0" />
+	                    </font>
+					</Label>
+            		<ImageView fx:id="progressImage" fitHeight="15.0" fitWidth="15.0" layoutX="240.0" layoutY="96" pickOnBounds="true" preserveRatio="true" visible="false">
+		               <image>
+		                  <Image url="@/images/progressBar.png" />
+		               </image>
+            		</ImageView>
                </children>
             </Pane>
             <Label layoutX="17.0" layoutY="475.0" prefHeight="17.0" prefWidth="262.0" text="DTC automation - DSD-DiagObject | Auto development">
