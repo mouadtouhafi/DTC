@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -25,10 +24,7 @@ public class ExecuteController implements Initializable{
 		progressImage.setVisible(true);
 	    label.setVisible(true);
 
-	    // start the spinner
 	    ImageRotation(progressImage);
-
-	    // after 3 seconds, swap in the check/X
 	    PauseTransition pause = new PauseTransition(Duration.seconds(3));
 	    pause.setOnFinished(evt -> updateImageView(progressImage, false));
 	    pause.play();
