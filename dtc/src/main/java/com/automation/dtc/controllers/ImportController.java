@@ -4,9 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.automation.dtc.blockbuilder.BuildDIAGXmlBlock;
 import com.automation.dtc.inputsdata.ReadDtcTable;
-import com.automation.dtc.inputsdata.ReadXMLMessaging;
 import com.automation.dtc.xmlsfiles.FilesPaths;
 
 import javafx.event.ActionEvent;
