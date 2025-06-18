@@ -30,20 +30,6 @@ public class ExecuteController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-//		progressImage.setVisible(true);
-//	    label.setVisible(true);
-//	    
-//	    try {
-//			Thread.sleep(3000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//	    ImageRotation(progressImage);
-//	    PauseTransition pause = new PauseTransition(Duration.seconds(3));
-//	    pause.setOnFinished(evt -> updateImageView(progressImage, false));
-//	    pause.play();
-
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
