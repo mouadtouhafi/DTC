@@ -37,8 +37,6 @@ public class ImportController implements Initializable{
     
     public static FilesPaths filesPaths = new FilesPaths();
     public static ReadDtcTable readDtcTable = new ReadDtcTable();
-    public static BuildDIAGXmlBlock buildDiag = new BuildDIAGXmlBlock();
-    ReadXMLMessaging readXMLMessaging = new ReadXMLMessaging();
 
     @FXML
     void DSD_btn_clicked(ActionEvent event) {
