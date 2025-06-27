@@ -5,9 +5,7 @@ import java.util.ResourceBundle;
 
 import com.automation.dtc.blockbuilder.BuildDIAGXmlBlock;
 import com.automation.dtc.inputsdata.ReadXMLMessaging;
-import com.automation.dtc.xmlsfiles.FilesPaths;
 
-import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -25,7 +23,6 @@ public class ExecuteController implements Initializable {
 	private Label label;
 	private RotateTransition rotate;
 	public BuildDIAGXmlBlock buildDiag = new BuildDIAGXmlBlock();
-	public FilesPaths filesPaths = new FilesPaths();
 	ReadXMLMessaging readXMLMessaging = new ReadXMLMessaging();
 
 	@Override
@@ -41,12 +38,11 @@ public class ExecuteController implements Initializable {
 					});
 					Thread.sleep(3000);
 
-					buildDiag.create_unexisting_dtc_blocks(filesPaths.getDiag_files(), DtcController.organizedData,
+					buildDiag.create_unexisting_dtc_blocks(ImportController.filesPaths.getDiag_files(), DtcController.organizedData,
 							DtcController.organized_labels);
-					if (!filesPaths.getDsd_files().equals("") && !filesPaths.getDsd_files().isEmpty()
-							&& !filesPaths.getDsd_files().equals(null)) {
-						readXMLMessaging.dtc_code_parameter_exists(filesPaths.getDsd_files());
-						readXMLMessaging.fault_type_parameter_exists(filesPaths.getDsd_files());
+					if (!ImportController.filesPaths.getDsd_files().equals("") && !ImportController.filesPaths.getDsd_files().isEmpty() && ImportController.filesPaths.getDsd_files() != null) {
+						readXMLMessaging.dtc_code_parameter_exists(ImportController.filesPaths.getDsd_files());
+						readXMLMessaging.fault_type_parameter_exists(ImportController.filesPaths.getDsd_files());
 					}
 					Platform.runLater(() -> {
 						updateImageView(progressImage, true);
