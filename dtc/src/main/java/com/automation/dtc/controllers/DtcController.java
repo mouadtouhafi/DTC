@@ -2,6 +2,8 @@ package com.automation.dtc.controllers;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -42,10 +44,13 @@ public class DtcController implements Initializable{
 	
 	public FilesPaths filesPaths = new FilesPaths();
 	
-	private List<List<String>> onlyDtcsToDisplay;
+	public static List<List<String>> onlyDtcsToDisplay;
     private List<SimpleBooleanProperty> rowSelectProps;
     public static Map<String, List<String>> organizedData;
+    public static Map<String, List<String>> newOrganizedData;
     public static List<String> organized_labels;
+    public static List<String> newOrganized_labels;
+    public static List<List<String>> newRcdFinalData;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -54,7 +59,11 @@ public class DtcController implements Initializable{
     	organizedData = ImportController.readDtcTable.organizeDtcCaras(ReadDtcTable.rcdFinalData, readXmlDiagData);
     	organized_labels = ImportController.readDtcTable.organize_labels();
     	onlyDtcsToDisplay = ImportController.readDtcTable.onlyDtcToDisplay(ReadDtcTable.rcdFinalData, organizedData);
-
+    	
+    	System.out.println("organizedData : "+organizedData);
+    	System.out.println("organized_labels : "+organized_labels);
+    	System.out.println("onlyDtcsToDisplay : "+onlyDtcsToDisplay);
+    	
 		ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();;
 		rowSelectProps = new ArrayList<>();
 		for (List<String> row : onlyDtcsToDisplay) {
@@ -109,11 +118,64 @@ public class DtcController implements Initializable{
 	
 	@FXML
     public void validate_selection_btn_clicked(ActionEvent e) throws Exception {
-        for (int i = rowSelectProps.size() - 1; i >= 0; i--) {
+        for (int i=rowSelectProps.size() - 1; i >= 0; i--) {
             if (!rowSelectProps.get(i).get()) {
                 onlyDtcsToDisplay.remove(i);
             }
         }
+        
+        newOrganizedData = new LinkedHashMap<>();
+        for (List<String> dtcEntry : onlyDtcsToDisplay) {
+            String dtcCode = dtcEntry.get(0);
+            String subCode = dtcEntry.get(2);
+
+            for (Map.Entry<String, List<String>> entry : organizedData.entrySet()) {
+                String originalKey = entry.getKey();
+                List<String> values = entry.getValue();
+
+                String normalizedKey = originalKey.startsWith("$") ? originalKey.substring(1) : originalKey;
+
+                if (normalizedKey.equals(dtcCode) && values.contains(subCode)) {
+                    newOrganizedData
+                        .computeIfAbsent(originalKey, k -> new ArrayList<>())
+                        .add(subCode);
+                }
+            }
+        }
+        System.out.println("newOrganizedData : "+ newOrganizedData);
+        
+        
+        newOrganized_labels = new ArrayList<>();
+        for (String entry : organized_labels) {
+            String[] parts = entry.split("\\|");
+            if (parts.length >= 3) {
+                String dtcCode = parts[0].trim();
+                String subCode = parts[2].trim();
+                List<String> values = newOrganizedData.get(dtcCode);
+                List<String> valuesWithDollar = newOrganizedData.get("$" + dtcCode);
+                boolean match = (values != null && values.contains(subCode)) || (valuesWithDollar != null && valuesWithDollar.contains(subCode));
+                if (match) {
+                    newOrganized_labels.add(entry);
+                }
+            }
+        }
+        System.out.println("newOrganized_labels : "+newOrganized_labels);
+        
+        newRcdFinalData = new ArrayList<>();
+        for(List<String> dtc : ReadDtcTable.rcdFinalData) {
+        	String dtcCode = dtc.get(0);
+        	if(newOrganizedData.containsKey(dtcCode) || newOrganizedData.containsKey("$"+dtcCode)) {
+        		List<String> values = newOrganizedData.get(dtcCode);
+        		List<String> valuesWithDollar = newOrganizedData.get("$" + dtcCode);
+        		boolean dtcExists = (values != null && values.contains(dtc.get(2))) || (valuesWithDollar != null && valuesWithDollar.contains(dtc.get(2)));
+		        if (dtcExists) {
+		            newRcdFinalData.add(dtc);
+		        }
+        	}
+        }
+        System.out.println("newRcdFinalData : "+newRcdFinalData);
+        
+        System.out.println("onlyDtcsToDisplay : "+onlyDtcsToDisplay);
         Parent root = FXMLLoader.load(getClass().getResource("/view/execute_view.fxml"));
     	Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
     	Scene scene = new Scene(root, 650,500);
