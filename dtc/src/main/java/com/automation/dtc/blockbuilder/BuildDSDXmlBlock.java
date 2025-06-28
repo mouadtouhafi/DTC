@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.automation.dtc.controllers.DtcController;
 import com.automation.dtc.inputsdata.ReadDtcTable;
 
 public class BuildDSDXmlBlock {
@@ -28,10 +29,10 @@ public class BuildDSDXmlBlock {
 		    Element fixedStatesElement = (Element) fixedStatesList.item(0);
 		    boolean exists = false;
 		    NodeList fixedStateList = fixedStatesElement.getElementsByTagName("FixedState");
-		    for(int dtc=0; dtc<ReadDtcTable.rcdFinalData.size(); dtc++) {
+		    for(int dtc=0; dtc<DtcController.newRcdFinalData.size(); dtc++) {
 			    for (int k = 0; k < fixedStateList.getLength(); k++) {
 			        Element fs = (Element) fixedStateList.item(k);
-			        if (ReadDtcTable.rcdFinalData.get(dtc).get(0).equals(fs.getAttribute("Value"))) {
+			        if (DtcController.newRcdFinalData.get(dtc).get(0).equals(fs.getAttribute("Value"))) {
 			            exists = true;
 			        }
 			    }
@@ -39,9 +40,9 @@ public class BuildDSDXmlBlock {
 			    // Append new FixedState only if it doesn't already exist
 			    if (!exists) {
 			        Element fixedState = doc.createElement("FixedState");
-			        fixedState.setAttribute("LongName", ReadDtcTable.rcdFinalData.get(dtc).get(1));
-			        fixedState.setAttribute("ShortName", "DTC_CODE_"+ReadDtcTable.rcdFinalData.get(dtc).get(0));
-			        fixedState.setAttribute("Value", ReadDtcTable.rcdFinalData.get(dtc).get(0));
+			        fixedState.setAttribute("LongName", DtcController.newRcdFinalData.get(dtc).get(1));
+			        fixedState.setAttribute("ShortName", "DTC_CODE_"+DtcController.newRcdFinalData.get(dtc).get(0));
+			        fixedState.setAttribute("Value", DtcController.newRcdFinalData.get(dtc).get(0));
 			        
 			        fixedStatesElement.appendChild(fixedState);
 			    }
@@ -59,10 +60,10 @@ public class BuildDSDXmlBlock {
 		    Element fixedStatesElement = (Element) fixedStatesList.item(0);
 		    boolean exists = false;
 		    NodeList fixedStateList = fixedStatesElement.getElementsByTagName("FixedState");
-		    for(int fault=0; fault<ReadDtcTable.rcdFinalData.size(); fault++) {
+		    for(int fault=0; fault<DtcController.newRcdFinalData.size(); fault++) {
 			    for (int k = 0; k < fixedStateList.getLength(); k++) {
 			        Element fs = (Element) fixedStateList.item(k);
-			        if (ReadDtcTable.rcdFinalData.get(fault).get(2).equals(fs.getAttribute("Value"))) {
+			        if (DtcController.newRcdFinalData.get(fault).get(2).equals(fs.getAttribute("Value"))) {
 			            exists = true;
 			        }
 			    }
@@ -70,9 +71,9 @@ public class BuildDSDXmlBlock {
 			    // Append new FixedState only if it doesn't already exist
 			    if (!exists) {
 			        Element fixedState = doc.createElement("FixedState");
-			        fixedState.setAttribute("LongName", ReadDtcTable.rcdFinalData.get(fault).get(3));
-			        fixedState.setAttribute("ShortName", "DTC_FAULT_TYPE_"+ReadDtcTable.rcdFinalData.get(fault).get(2));
-			        fixedState.setAttribute("Value", ReadDtcTable.rcdFinalData.get(fault).get(2));
+			        fixedState.setAttribute("LongName", DtcController.newRcdFinalData.get(fault).get(3));
+			        fixedState.setAttribute("ShortName", "DTC_FAULT_TYPE_"+DtcController.newRcdFinalData.get(fault).get(2));
+			        fixedState.setAttribute("Value", DtcController.newRcdFinalData.get(fault).get(2));
 			        
 			        fixedStatesElement.appendChild(fixedState);
 			    }
