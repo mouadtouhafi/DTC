@@ -38,8 +38,7 @@ public class ExecuteController implements Initializable {
 					});
 					Thread.sleep(3000);
 
-					buildDiag.create_unexisting_dtc_blocks(ImportController.filesPaths.getDiag_files(), DtcController.organizedData,
-							DtcController.organized_labels);
+					buildDiag.create_unexisting_dtc_blocks(ImportController.filesPaths.getDiag_files(), DtcController.newOrganizedData, DtcController.newOrganized_labels);
 					if (!ImportController.filesPaths.getDsd_files().equals("") && !ImportController.filesPaths.getDsd_files().isEmpty() && ImportController.filesPaths.getDsd_files() != null) {
 						readXMLMessaging.dtc_code_parameter_exists(ImportController.filesPaths.getDsd_files());
 						readXMLMessaging.fault_type_parameter_exists(ImportController.filesPaths.getDsd_files());
