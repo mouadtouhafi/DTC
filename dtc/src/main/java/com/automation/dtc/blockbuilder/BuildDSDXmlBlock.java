@@ -17,7 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.automation.dtc.controllers.DtcController;
-import com.automation.dtc.inputsdata.ReadDtcTable;
 
 public class BuildDSDXmlBlock {
 	/* 
