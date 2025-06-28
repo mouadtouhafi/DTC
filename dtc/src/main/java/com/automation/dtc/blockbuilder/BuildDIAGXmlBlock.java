@@ -22,6 +22,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.automation.dtc.controllers.DtcController;
 import com.automation.dtc.inputsdata.ReadDtcTable;
 
 public class BuildDIAGXmlBlock {
@@ -35,6 +36,7 @@ public class BuildDIAGXmlBlock {
             
             NodeList gpcEcuDTC = doc.getElementsByTagName("GpcEcuDTC");
             if(gpcEcuDTC.getLength()>0) {
+            	System.out.println("we are here");
             	NodeList gpcEcuDTCDef = doc.getElementsByTagName("GpcEcuDTCDef");
             	if(gpcEcuDTCDef.getLength()>0) {
             		for(Map.Entry<String, List<String>> entry : dtc_to_add.entrySet()) {
@@ -76,8 +78,9 @@ public class BuildDIAGXmlBlock {
             		}
             	}
             }else {
-            	create_full_dtc_code_block(doc, file, ReadDtcTable.rcdFinalData);
-            	create_full_cara_block(doc, file, ReadDtcTable.rcdFinalData, dtc_to_add);
+            	System.out.println("ReadDtcTable.rcdFinalData : "+ReadDtcTable.rcdFinalData);
+            	create_full_dtc_code_block(doc, file, DtcController.newRcdFinalData);
+            	create_full_cara_block(doc, file, DtcController.newRcdFinalData, dtc_to_add);
             }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -226,7 +229,7 @@ public class BuildDIAGXmlBlock {
 			newPropertyDef.setAttribute("Label", "@P14473-POLUXDATA");
 			newPropertyDef.setAttribute("PropertyType", "FAULT_TYPE");
 			newPropertyDef.setAttribute("ServiceParamName", "DTC_FAULT_TYPE");
-			newPropertyDef.setAttribute("ShortName", "DTC_FAULT_TYPE_"+entry.getKey());
+			newPropertyDef.setAttribute("ShortName", "DTC_FAULT_TYPE_"+entry.getKey().replace("$", ""));
 			
 			Element discretValuesList = doc.createElement("GpcEcuDTCPropertyDiscretValues");
 			List<String> caras = entry.getValue();
