@@ -102,6 +102,12 @@ public class DtcController implements Initializable{
 		property_column.setCellValueFactory(cell -> new ReadOnlyStringWrapper(cell.getValue().get(2)));
 		property_label_column.setCellValueFactory(cell -> new ReadOnlyStringWrapper(cell.getValue().get(3)));
 		
+		checkboxes_column.setSortable(false);
+		dtc_column.setSortable(false);
+		dtc_label_column.setSortable(false);
+		property_column.setSortable(false);
+		property_label_column.setSortable(false);
+
 		validate_selection_btn.setDisable(true);
 
 		tableView.setItems(tableData);
