@@ -14,8 +14,6 @@ public class SettingController {
     @FXML
     private Spinner<Integer> spinner_1;
 
-    @FXML
-    private Spinner<Integer> spinner_2;
 
     @FXML
     private Button submit_btn;
@@ -24,7 +22,6 @@ public class SettingController {
     public void initialize() {
         // Set value factory: min = 0, max = 100, initial = 10, step = 1
         spinner_1.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 26));
-        spinner_2.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
     }
 
     @FXML
