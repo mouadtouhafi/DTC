@@ -99,25 +99,18 @@ public class ImportController implements Initializable{
         }
         validate_import_btn.setDisable(true);
         
-        
-    	
     	Parent root = FXMLLoader.load(getClass().getResource("/view/dtcs_view.fxml"));
     	Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
     	Scene scene = new Scene(root, 650,500);
     	scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
     	stage.setScene(scene);
     	stage.show();
-    	
-    	
-    	
-        
     }
 
     public boolean isFilesChecked() throws Exception{
     	String rcdPath = readDtcTable.getRcdPath();
-    	String dsd_file = filesPaths.getDsd_files();
     	String diag_file = filesPaths.getDiag_files();
-    	if (rcdPath == null || rcdPath.equals("") || dsd_file == null || dsd_file.isEmpty() || diag_file == null || diag_file.isEmpty()) {
+    	if (rcdPath == null || rcdPath.equals("") || diag_file == null || diag_file.isEmpty()) {
     		return false;
     	}else {
     		return true;
