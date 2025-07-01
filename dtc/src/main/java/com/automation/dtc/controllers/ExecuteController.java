@@ -1,6 +1,5 @@
 package com.automation.dtc.controllers;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -104,7 +103,6 @@ public class ExecuteController implements Initializable {
 		}else {
 			label.setText("Integration of fault codes is failed.");
 		}
-		
 	}
 	
 	@FXML
