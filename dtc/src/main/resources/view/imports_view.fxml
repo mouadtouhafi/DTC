@@ -60,7 +60,8 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="validate_import_btn" layoutX="81.5" layoutY="153.0" mnemonicParsing="false" onAction="#validate_import_btn_clicked" prefHeight="31.0" prefWidth="100.0" text="Validate" />
+                  <Button fx:id="cancel_btn" layoutX="20.5" layoutY="165.0" mnemonicParsing="false" onAction="#cancel_btn_clicked" prefHeight="31.0" prefWidth="100.0" text="Cancel" />
+                  <Button fx:id="validate_import_btn" layoutX="146.5" layoutY="165.0" mnemonicParsing="false" onAction="#validate_import_btn_clicked" prefHeight="31.0" prefWidth="100.0" text="Validate" />
                </children>
             </Pane>
             <Label layoutX="17.0" layoutY="475.0" prefHeight="17.0" prefWidth="262.0" text="DTC automation - DSD-DiagObject | Auto development">
