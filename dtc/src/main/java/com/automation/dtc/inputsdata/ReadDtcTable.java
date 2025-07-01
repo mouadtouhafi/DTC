@@ -14,31 +14,22 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ReadDtcTable {
-	private int startRow;
+	public static int startRow = 24;
 	private String rcdPath;
 	public static List<List<String>> rcdFinalData;
 
 	public ReadDtcTable() {
-		this.startRow = 25;
 	}
 
 	public String getRcdPath() {
 		return rcdPath;
 	}
 
-	public int getStartRow() {
-		return startRow;
-	}
-
-	public void setStartRow(int startRow) {
-		this.startRow = startRow;
-	}
-
 	public void setRcdPath(String rcdPath) {
 		this.rcdPath = rcdPath;
 	}
 
-	public void readTable() {
+	public void readTable() throws InvalidDtcCodeException {
 		List<List<String>> data_dtc = new ArrayList<>();
 		try {
 			FileInputStream file = new FileInputStream(rcdPath);
@@ -57,7 +48,6 @@ public class ReadDtcTable {
 					else
 						continue;
 				}
-
 				boolean allCellsEmpty = true;
 				for (int col : new int[] { 2, 3, 4, 6 }) {
 					Cell cell = row.getCell(col);
@@ -66,7 +56,6 @@ public class ReadDtcTable {
 						break;
 					}
 				}
-
 				if (allCellsEmpty) {
 					emptyCount++;
 					if (emptyCount >= maxEmptyRows)
@@ -94,19 +83,18 @@ public class ReadDtcTable {
 			}
 			workbook.close();
 			file.close();
-
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		ReadDtcTable.rcdFinalData = data_dtc;
 	}
 
-	public String toTwoBitBinary(String code) {
+	public String toTwoBitBinary(String code) throws InvalidDtcCodeException {
 		char digitChar = code.charAt(1);
 		if (digitChar < '0' || digitChar > '3') {
-			throw new IllegalArgumentException("Character must be between '0' and '3'");
+			System.out.println(digitChar);
+			throw new InvalidDtcCodeException("Character must be between '0' and '3'");
 		}
-
 		int number = digitChar - '0';
 		String binary = Integer.toBinaryString(number);
 		return String.format("%2s", binary).replace(' ', '0');
@@ -114,24 +102,23 @@ public class ReadDtcTable {
 
 	public String concatDigits(char first, String second) {
 		switch (first) {
-		case 'P':
-			return "00" + second;
-		case 'C':
-			return "01" + second;
-		case 'B':
-			return "10" + second;
-		case 'U':
-			return "11" + second;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + first);
+			case 'P':
+				return "00" + second;
+			case 'C':
+				return "01" + second;
+			case 'B':
+				return "10" + second;
+			case 'U':
+				return "11" + second;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + first);
 		}
 	}
 
-	public String binaryToHex(String binary) {
+	public String binaryToHex(String binary) throws InvalidDtcCodeException {
 		if (binary.length() != 4 || !binary.matches("[01]+")) {
-			throw new IllegalArgumentException("Input must be a 4-digit binary string");
+			throw new InvalidDtcCodeException("Input must be a 4-digit binary string");
 		}
-
 		int decimal = Integer.parseInt(binary, 2);
 		return Integer.toHexString(decimal).toUpperCase();
 	}
