@@ -63,27 +63,22 @@ public class DtcController implements Initializable{
 	            try {
 	                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/error_view.fxml"));
 	                Parent root = loader.load();
-
 	                ErrorController controller = loader.getController();
-	                controller.setErrorMessage("DTC Error: " + e.getMessage());
-
+	                controller.setErrorMessage("DTC Error : " + e.getMessage());
 	                Stage stage = (Stage) tableView.getScene().getWindow();
 	                Scene scene = new Scene(root, 650, 500);
+	                scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
 	                stage.setScene(scene);
 	                stage.show();
 	            } catch (Exception ex) {
-	                ex.printStackTrace(); // fallback
+	                ex.printStackTrace();
 	            }
 	        });
-	        return; // prevent continuing init if DTCs are invalid
+	        return;
 	    }
     	organizedData = ImportController.readDtcTable.organizeDtcCaras(ReadDtcTable.rcdFinalData, readXmlDiagData);
     	organized_labels = ImportController.readDtcTable.organize_labels();
     	onlyDtcsToDisplay = ImportController.readDtcTable.onlyDtcToDisplay(ReadDtcTable.rcdFinalData, organizedData);
-    	
-    	System.out.println("organizedData : "+organizedData);
-    	System.out.println("organized_labels : "+organized_labels);
-    	System.out.println("onlyDtcsToDisplay : "+onlyDtcsToDisplay);
     	
 		ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();;
 		rowSelectProps = new ArrayList<>();
@@ -150,7 +145,6 @@ public class DtcController implements Initializable{
                 onlyDtcsToDisplay.remove(i);
             }
         }
-        
         newOrganizedData = new LinkedHashMap<>();
         for (List<String> dtcEntry : onlyDtcsToDisplay) {
             String dtcCode = dtcEntry.get(0);
@@ -161,7 +155,6 @@ public class DtcController implements Initializable{
                 List<String> values = entry.getValue();
 
                 String normalizedKey = originalKey.startsWith("$") ? originalKey.substring(1) : originalKey;
-
                 if (normalizedKey.equals(dtcCode) && values.contains(subCode)) {
                     newOrganizedData
                         .computeIfAbsent(originalKey, k -> new ArrayList<>())
@@ -169,8 +162,6 @@ public class DtcController implements Initializable{
                 }
             }
         }
-        System.out.println("newOrganizedData : "+ newOrganizedData);
-        
         
         newOrganized_labels = new ArrayList<>();
         for (String entry : organized_labels) {
@@ -186,7 +177,6 @@ public class DtcController implements Initializable{
                 }
             }
         }
-        System.out.println("newOrganized_labels : "+newOrganized_labels);
         
         newRcdFinalData = new ArrayList<>();
         for(List<String> dtc : ReadDtcTable.rcdFinalData) {
@@ -200,9 +190,7 @@ public class DtcController implements Initializable{
 		        }
         	}
         }
-        System.out.println("newRcdFinalData : "+newRcdFinalData);
         
-        System.out.println("onlyDtcsToDisplay : "+onlyDtcsToDisplay);
         Parent root = FXMLLoader.load(getClass().getResource("/view/execute_view.fxml"));
     	Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
     	Scene scene = new Scene(root, 650,500);
