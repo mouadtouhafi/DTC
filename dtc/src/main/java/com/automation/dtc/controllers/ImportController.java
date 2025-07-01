@@ -1,6 +1,7 @@
 package com.automation.dtc.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -32,6 +33,7 @@ public class ImportController implements Initializable{
     @FXML private Button RCD_btn;
     @FXML private TextField RCD_input;
     @FXML private Button validate_import_btn;
+    @FXML private Button cancel_btn;
     
     public static FilesPaths filesPaths = new FilesPaths();
     public static ReadDtcTable readDtcTable = new ReadDtcTable();
@@ -78,6 +80,22 @@ public class ImportController implements Initializable{
     		readDtcTable.setRcdPath(file.getPath());
     		RCD_input.setText(file.getName());
     		RCD_input.setStyle("-fx-text-fill: green; -fx-opacity: 1; -fx-font-size: 10px;");
+    	}
+    }
+    
+    @FXML
+    void cancel_btn_clicked(ActionEvent e) throws IOException {
+    	if(!RCD_input.getText().isEmpty() || !DSD_input.getText().isEmpty() || !DiagObject_input.getText().isEmpty()) {
+    		RCD_input.clear();
+    		DSD_input.clear();
+    		DiagObject_input.clear();
+    	}else {
+    		Parent root = FXMLLoader.load(getClass().getResource("/view/home_view.fxml"));
+        	Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        	Scene scene = new Scene(root, 650,500);
+        	scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        	stage.setScene(scene);
+        	stage.show();
     	}
     }
  
