@@ -23,7 +23,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.automation.dtc.controllers.DtcController;
-import com.automation.dtc.inputsdata.ReadDtcTable;
 
 public class BuildDIAGXmlBlock {
 	
@@ -36,7 +35,6 @@ public class BuildDIAGXmlBlock {
             
             NodeList gpcEcuDTC = doc.getElementsByTagName("GpcEcuDTC");
             if(gpcEcuDTC.getLength()>0) {
-            	System.out.println("we are here");
             	NodeList gpcEcuDTCDef = doc.getElementsByTagName("GpcEcuDTCDef");
             	if(gpcEcuDTCDef.getLength()>0) {
             		for(Map.Entry<String, List<String>> entry : dtc_to_add.entrySet()) {
@@ -72,13 +70,11 @@ public class BuildDIAGXmlBlock {
                 					}
             					}
             				}
-            				System.out.println(caras);
             				build_fault_type_values_only(file, doc, caras);
             			}
             		}
             	}
             }else {
-            	System.out.println("ReadDtcTable.rcdFinalData : "+ReadDtcTable.rcdFinalData);
             	create_full_dtc_code_block(doc, file, DtcController.newRcdFinalData);
             	create_full_cara_block(doc, file, DtcController.newRcdFinalData, dtc_to_add);
             }
@@ -88,7 +84,6 @@ public class BuildDIAGXmlBlock {
 	}
 	
 	public void build_fault_type_values_only(String file, Document doc, List<String> caras) throws Exception {
-//		System.out.println("acara : "+caras);
 		NodeList gpcEcuDTCPropertyDef = doc.getElementsByTagName("GpcEcuDTCPropertyDef");
 		if(gpcEcuDTCPropertyDef.getLength() > 0) {
 			for(int i=0; i<gpcEcuDTCPropertyDef.getLength(); i++) {

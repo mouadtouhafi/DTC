@@ -113,32 +113,31 @@ public class BuildDSDXmlBlock {
 	
 	public void build_fault_type_parameter(Document doc) throws Exception {
 		Node parametersNode = doc.getElementsByTagName("Parameters").item(0);
+		Element newParam = doc.createElement("Parameter");
+        newParam.setAttribute("LongName", "");
+        newParam.setAttribute("ShortName", "DTC_FAULT_TYPE");
 
-	        Element newParam = doc.createElement("Parameter");
-	        newParam.setAttribute("LongName", "");
-	        newParam.setAttribute("ShortName", "DTC_FAULT_TYPE");
+        Element addressedData = doc.createElement("AddressedData");
+        Element addressedBytes = doc.createElement("AddressedBytes");
+        addressedBytes.setAttribute("ByteLength", "1");
+        addressedData.appendChild(addressedBytes);
+        newParam.appendChild(addressedData);
 
-	        Element addressedData = doc.createElement("AddressedData");
-	        Element addressedBytes = doc.createElement("AddressedBytes");
-	        addressedBytes.setAttribute("ByteLength", "1");
-	        addressedData.appendChild(addressedBytes);
-	        newParam.appendChild(addressedData);
+        Element data = doc.createElement("Data");
+        Element binary = doc.createElement("Binary");
+        binary.setAttribute("Encoding", "ENUM");
 
-	        Element data = doc.createElement("Data");
-	        Element binary = doc.createElement("Binary");
-	        binary.setAttribute("Encoding", "ENUM");
-
-	        Element fixedStates = doc.createElement("FixedStates");
-	        binary.appendChild(fixedStates);
-	        
-	        Element intervalStates = doc.createElement("IntervalStates");
-	        binary.appendChild(intervalStates);
-	        
-	        data.appendChild(binary);
-	        newParam.appendChild(data);
-	        
-	        parametersNode.appendChild(newParam);
-	        build_fault_type_fixed_values(doc, newParam);		
+        Element fixedStates = doc.createElement("FixedStates");
+        binary.appendChild(fixedStates);
+        
+        Element intervalStates = doc.createElement("IntervalStates");
+        binary.appendChild(intervalStates);
+        
+        data.appendChild(binary);
+        newParam.appendChild(data);
+        
+        parametersNode.appendChild(newParam);
+        build_fault_type_fixed_values(doc, newParam);
 	}
 	
 	public void clean_doc_break_lines(Document doc) throws Exception {
