@@ -15,6 +15,7 @@ public class MainApp extends Application {
         scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/favicon.png")));
         primaryStage.setTitle("DTC Automation App");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
