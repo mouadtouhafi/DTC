@@ -49,7 +49,6 @@ public class ReadXMLDiag {
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
-		System.out.println("OLD_DIAG_DTC : " + OLD_DIAG_DTC);
 		return OLD_DIAG_DTC;
 	}
 }
