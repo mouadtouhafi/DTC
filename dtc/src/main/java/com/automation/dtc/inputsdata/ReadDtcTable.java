@@ -92,8 +92,7 @@ public class ReadDtcTable {
 	public String toTwoBitBinary(String code) throws InvalidDtcCodeException {
 		char digitChar = code.charAt(1);
 		if (digitChar < '0' || digitChar > '3') {
-			System.out.println(digitChar);
-			throw new InvalidDtcCodeException("Character must be between '0' and '3'");
+			throw new InvalidDtcCodeException("Invalid format. Verify the table header row number.");
 		}
 		int number = digitChar - '0';
 		String binary = Integer.toBinaryString(number);
