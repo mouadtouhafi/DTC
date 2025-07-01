@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import com.automation.dtc.inputsdata.InvalidDtcCodeException;
 import com.automation.dtc.inputsdata.ReadDtcTable;
 import com.automation.dtc.inputsdata.ReadXMLDiag;
 import com.automation.dtc.xmlsfiles.FilesPaths;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -54,7 +56,27 @@ public class DtcController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		Map<String, List<String>> readXmlDiagData = new ReadXMLDiag().readXMLDtc(ImportController.filesPaths.getDiag_files());
-    	ImportController.readDtcTable.readTable();
+		try {
+	        ImportController.readDtcTable.readTable();
+	    } catch (InvalidDtcCodeException e) {
+	        Platform.runLater(() -> {
+	            try {
+	                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/error_view.fxml"));
+	                Parent root = loader.load();
+
+	                ErrorController controller = loader.getController();
+	                controller.setErrorMessage("DTC Error: " + e.getMessage());
+
+	                Stage stage = (Stage) tableView.getScene().getWindow();
+	                Scene scene = new Scene(root, 650, 500);
+	                stage.setScene(scene);
+	                stage.show();
+	            } catch (Exception ex) {
+	                ex.printStackTrace(); // fallback
+	            }
+	        });
+	        return; // prevent continuing init if DTCs are invalid
+	    }
     	organizedData = ImportController.readDtcTable.organizeDtcCaras(ReadDtcTable.rcdFinalData, readXmlDiagData);
     	organized_labels = ImportController.readDtcTable.organize_labels();
     	onlyDtcsToDisplay = ImportController.readDtcTable.onlyDtcToDisplay(ReadDtcTable.rcdFinalData, organizedData);
